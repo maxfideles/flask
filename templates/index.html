@@ -1,0 +1,316 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>O BRABO</title>
+<script>
+window.onload = function () {
+CanvasJS.addCultureInfo("br", 
+    {      
+      decimalSeparator: ",",// Observe ToolTip Number Format
+      digitGroupSeparator: ".", // Observe axisY labels                   
+      days: ["domingo", "segunda", "terça", "quarta", "quinta", "sexta", "sábado"]
+      
+    });
+var consumochart = new CanvasJS.Chart("consumo", {
+	culture: "br",
+	theme:"light1",
+	exportEnabled: true,
+	animationEnabled: true,
+	title:{
+		text: "Consumo Lido"
+	},
+	subtitles: [{
+		text: "Clique na legenda para ativar ou desativar os dados da série"
+	}], 
+	axisX: {
+		title: "Meses"
+	},
+	axisY: {
+		title: "Consumo (kWh)",
+		titleFontColor: "#4F81BC",
+		lineColor: "#4F81BC",
+		labelFontColor: "#4F81BC",
+		tickColor: "#4F81BC",
+		includeZero: true
+	},
+	
+	toolTip: {
+		shared: true
+	},
+	legend: {
+		cursor: "pointer",
+		itemclick: toggleDataSeries
+	},
+	data: [{
+		type: "column",
+		name: "Ponta",
+		showInLegend: true,      
+		yValueFormatString: "#,##0.# kWh",
+		dataPoints: [
+			{ label: '{{res[8][0]}}',  y: {{res[9][0][0]}} },
+			{ label: '{{res[8][1]}}', y: {{res[9][1][0]}} },
+			{ label: '{{res[8][2]}}', y: {{res[9][2][0]}} },
+			{ label: '{{res[8][3]}}',  y: {{res[9][3][0]}} },
+			{ label: '{{res[8][4]}}',  y: {{res[9][4][0]}} },
+			{ label: '{{res[8][5]}}',  y: {{res[9][5][0]}} },
+			{ label: '{{res[8][6]}}', y: {{res[9][6][0]}} },
+			{ label: '{{res[8][7]}}', y: {{res[9][7][0]}} },
+			{ label: '{{res[8][8]}}',  y: {{res[9][8][0]}} },
+			{ label: '{{res[8][9]}}',  y: {{res[9][9][0]}} },
+			{ label: '{{res[8][10]}}',  y: {{res[9][10][0]}} },
+			{ label: '{{res[8][11]}}',  y: {{res[9][11][0]}} }	
+		]
+	},
+	{
+		type: "column",
+		name: "Fora de Ponta",
+		showInLegend: true,
+		yValueFormatString: "#,##0.# kWh",
+		dataPoints: [         
+			{ label: '{{res[8][0]}}',  y: {{res[9][0][1]}} },
+			{ label: '{{res[8][1]}}', y: {{res[9][1][1]}} },
+			{ label: '{{res[8][2]}}', y: {{res[9][2][1]}} },
+			{ label: '{{res[8][3]}}',  y: {{res[9][3][1]}} },
+			{ label: '{{res[8][4]}}',  y: {{res[9][4][1]}} },
+			{ label: '{{res[8][5]}}',  y: {{res[9][5][1]}} },
+			{ label: '{{res[8][6]}}', y: {{res[9][6][1]}} },
+			{ label: '{{res[8][7]}}', y: {{res[9][7][1]}} },
+			{ label: '{{res[8][8]}}',  y: {{res[9][8][1]}} },
+			{ label: '{{res[8][9]}}',  y: {{res[9][9][1]}} },
+			{ label: '{{res[8][10]}}',  y: {{res[9][10][1]}} },
+			{ label: '{{res[8][11]}}',  y: {{res[9][11][1]}} }	
+		]
+	},
+	{
+		type: "column",
+		name: "Hor. Res",
+		showInLegend: true,
+		yValueFormatString: "#,##0.# kWh",
+		dataPoints: [
+			{ label: '{{res[8][0]}}',  y: {{res[9][0][2]}} },
+			{ label: '{{res[8][1]}}', y: {{res[9][1][2]}} },
+			{ label: '{{res[8][2]}}', y: {{res[9][2][2]}} },
+			{ label: '{{res[8][3]}}',  y: {{res[9][3][2]}} },
+			{ label: '{{res[8][4]}}',  y: {{res[9][4][2]}} },
+			{ label: '{{res[8][5]}}',  y: {{res[9][5][2]}} },
+			{ label: '{{res[8][6]}}', y: {{res[9][6][2]}} },
+			{ label: '{{res[8][7]}}', y: {{res[9][7][2]}} },
+			{ label: '{{res[8][8]}}',  y: {{res[9][8][2]}} },
+			{ label: '{{res[8][9]}}',  y: {{res[9][9][2]}} },
+			{ label: '{{res[8][10]}}',  y: {{res[9][10][2]}} },
+			{ label: '{{res[8][11]}}',  y: {{res[9][11][2]}} }
+		
+		]
+	}]
+});
+var demandachart = new CanvasJS.Chart("demanda", {
+	culture: "br",
+	theme:"light1",
+	exportEnabled: true,
+	animationEnabled: true,
+	title:{
+		text: "Demanda Lida"
+	},
+	subtitles: [{
+		text: "Clique na legenda para ativar ou desativar os dados da série"
+	}], 
+	axisX: {
+		title: "Meses"
+	},
+	axisY: {
+		title: "Demanda (kW)",
+		titleFontColor: "#4F81BC",
+		lineColor: "#4F81BC",
+		labelFontColor: "#4F81BC",
+		tickColor: "#4F81BC",
+		includeZero: true
+	},
+	
+	toolTip: {
+		shared: true
+	},
+	legend: {
+		cursor: "pointer",
+		itemclick: toggleDataSeries
+	},
+	data: [{
+		type: "column",
+		name: "Ponta",
+		showInLegend: true,      
+		yValueFormatString: "#,##0.# kW",
+		dataPoints: [
+			{ label: '{{res[8][0]}}',  y: {{res[10][0][0]}} },
+			{ label: '{{res[8][1]}}', y: {{res[10][1][0]}} },
+			{ label: '{{res[8][2]}}', y: {{res[10][2][0]}} },
+			{ label: '{{res[8][3]}}',  y: {{res[10][3][0]}} },
+			{ label: '{{res[8][4]}}',  y: {{res[10][4][0]}} },
+			{ label: '{{res[8][5]}}',  y: {{res[10][5][0]}} },
+			{ label: '{{res[8][6]}}', y: {{res[10][6][0]}} },
+			{ label: '{{res[8][7]}}', y: {{res[10][7][0]}} },
+			{ label: '{{res[8][8]}}',  y: {{res[10][8][0]}} },
+			{ label: '{{res[8][9]}}',  y: {{res[10][9][0]}} },
+			{ label: '{{res[8][10]}}',  y: {{res[10][10][0]}} },
+			{ label: '{{res[8][11]}}',  y: {{res[10][11][0]}} }	
+		]
+	},
+	{
+		type: "column",
+		name: "Fora de Ponta",
+		showInLegend: true,
+		yValueFormatString: "#,##0.# kW",
+		dataPoints: [         
+			{ label: '{{res[8][0]}}',  y: {{res[10][0][1]}} },
+			{ label: '{{res[8][1]}}', y: {{res[10][1][1]}} },
+			{ label: '{{res[8][2]}}', y: {{res[10][2][1]}} },
+			{ label: '{{res[8][3]}}',  y: {{res[10][3][1]}} },
+			{ label: '{{res[8][4]}}',  y: {{res[10][4][1]}} },
+			{ label: '{{res[8][5]}}',  y: {{res[10][5][1]}} },
+			{ label: '{{res[8][6]}}', y: {{res[10][6][1]}} },
+			{ label: '{{res[8][7]}}', y: {{res[10][7][1]}} },
+			{ label: '{{res[8][8]}}',  y: {{res[10][8][1]}} },
+			{ label: '{{res[8][9]}}',  y: {{res[10][9][1]}} },
+			{ label: '{{res[8][10]}}',  y: {{res[10][10][1]}} },
+			{ label: '{{res[8][11]}}',  y: {{res[10][11][1]}} }	
+		]
+	},
+	{
+		type: "column",
+		name: "Hor. Res",
+		showInLegend: true,
+		yValueFormatString: "#,##0.# kW",
+		dataPoints: [
+			{ label: '{{res[8][0]}}',  y: {{res[10][0][2]}} },
+			{ label: '{{res[8][1]}}', y: {{res[10][1][2]}} },
+			{ label: '{{res[8][2]}}', y: {{res[10][2][2]}} },
+			{ label: '{{res[8][3]}}',  y: {{res[10][3][2]}} },
+			{ label: '{{res[8][4]}}',  y: {{res[10][4][2]}} },
+			{ label: '{{res[8][5]}}',  y: {{res[10][5][2]}} },
+			{ label: '{{res[8][6]}}', y: {{res[10][6][2]}} },
+			{ label: '{{res[8][7]}}', y: {{res[10][7][2]}} },
+			{ label: '{{res[8][8]}}',  y: {{res[10][8][2]}} },
+			{ label: '{{res[8][9]}}',  y: {{res[10][9][2]}} },
+			{ label: '{{res[8][10]}}',  y: {{res[10][10][2]}} },
+			{ label: '{{res[8][11]}}',  y: {{res[10][11][2]}} }
+		
+		]
+	},
+	{
+		type: "line",
+		name: "Demanda Contratada",
+		showInLegend: true,
+		yValueFormatString: "#,##0.# kW",
+		dataPoints: [
+			{ label: '{{res[8][0]}}',  y: {{res[11]}} },
+			{ label: '{{res[8][1]}}', y:  {{res[11]}} },
+			{ label: '{{res[8][2]}}', y: {{res[11]}} },
+			{ label: '{{res[8][3]}}',  y:{{res[11]}} },
+			{ label: '{{res[8][4]}}',  y:{{res[11]}} },
+			{ label: '{{res[8][5]}}',  y:{{res[11]}} },
+			{ label: '{{res[8][6]}}', y: {{res[11]}} },
+			{ label: '{{res[8][7]}}', y: {{res[11]}} },
+			{ label: '{{res[8][8]}}',  y:{{res[11]}} },
+			{ label: '{{res[8][9]}}',  y:{{res[11]}} },
+			{ label: '{{res[8][10]}}', y:{{res[11]}} },
+			{ label: '{{res[8][11]}}', y:{{res[11]}} }
+		
+		]
+	},
+	{
+		type: "line",
+		name: "Nova Demanda",
+		showInLegend: true,
+		yValueFormatString: "#,##0.# kW",
+		dataPoints: [
+			{ label: '{{res[8][0]}}',  y: {{res[4]}} },
+			{ label: '{{res[8][1]}}', y:  {{res[4]}} },
+			{ label: '{{res[8][2]}}', y: {{res[4]}} },
+			{ label: '{{res[8][3]}}',  y:{{res[4]}} },
+			{ label: '{{res[8][4]}}',  y:{{res[4]}} },
+			{ label: '{{res[8][5]}}',  y:{{res[4]}} },
+			{ label: '{{res[8][6]}}', y: {{res[4]}} },
+			{ label: '{{res[8][7]}}', y: {{res[4]}} },
+			{ label: '{{res[8][8]}}',  y:{{res[4]}} },
+			{ label: '{{res[8][9]}}',  y:{{res[4]}} },
+			{ label: '{{res[8][10]}}', y:{{res[4]}} },
+			{ label: '{{res[8][11]}}', y:{{res[4]}} }
+		
+		]
+	}]
+});
+
+consumochart.render();
+demandachart.render();
+
+function toggleDataSeries(e) {
+	if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+		e.dataSeries.visible = false;
+	} else {
+		e.dataSeries.visible = true;
+	}
+	e.chart.render();
+}
+
+}
+</script>
+{% endblock %}
+
+{% block body %}
+<div>
+	<form action="/" method="POST" enctype="multipart/form-data">
+	<input type="file" name="arquivo" id="arquivo">
+	<input type="submit" value="Ok">
+	</form>
+	<br>
+	<table border="1">
+		
+		<tr>
+		<td>Consumo Anual </td>
+		<td>{{ "{:.2f}".format(res[0]).replace(".",",") }}</td>
+		</tr>
+		
+		<tr>
+		<td>Potência estimada do sistema </td>
+		<td>{{ "{:.2f}".format(res[1]).replace(".",",") }}</td>
+		</tr>
+		
+		<tr>
+		<td>Numero aproximado de modulos </td>
+		<td>{{ "{:.2f}".format(res[2]).replace(".",",") }}</td>
+		</tr>
+		
+		<tr>
+		<td>Maior demanda lida anual </td>
+		<td>{{ "{:.2f}".format(res[3]).replace(".",",") }}</td>
+		</tr>
+		
+		<tr>
+		<td>Nova demanda sem multa </td>
+		<td>{{ "{:.2f}".format(res[4]).replace(".",",") }}</td>
+		</tr>
+		
+		<tr>
+		<td>Possível demanda com multa </td>
+		<td>{{ "{:.2f}".format(res[5]).replace(".",",") }}</td>
+		</tr>
+		
+		<tr>
+		<td>Economia sem multa </td>
+		<td>{{ "{:.2f}".format(res[6]).replace(".",",") }}</td>
+		</tr>
+		
+		<tr>
+		<td>Economia com multa </td>
+		<td>{{ "{:.2f}".format(res[7]).replace(".",",") }}</td>
+		</tr>
+	</table>
+</div>
+<table border="1" width="100%">
+<tr width="100%">
+<td width="50%"><div id="consumo" style="height: 370px; width: 100%;"></div></td>
+<td width="50%"><div id="demanda" style="height: 370px; width: 100%;"></div></td>
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+</tr>
+</table>
+
+
+{% endblock %}
